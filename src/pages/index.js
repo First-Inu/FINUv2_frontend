@@ -13,7 +13,7 @@ export default function Pages(props) {
         <Route
           exact
           key={path}
-          path={path} 
+          path={path}
           component={component}
         />
       ))}
