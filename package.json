@@ -1,64 +1,40 @@
 {
-  "name": "frontend-2021",
-  "author": "Thomas Peace <twpeace@me.com>",
-  "version": "1.0.0",
-  "description": "Minimal frontend",
+  "name": "next-starter-tailwind",
+  "version": "2.0.0",
+  "description": "Next.js starter styled with Tailwind CSS",
   "main": "index.js",
-  "license": "MIT",
-  "private": false,
-  "keywords": [
-    "minimal",
-    "boilerplate",
-    "react",
-    "redux",
-    "2021",
-    "static",
-    "web",
-    "app"
-  ],
   "scripts": {
-    "dev": "webpack serve --env development",
-    "build": "webpack --env production",
-    "test": "jest"
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/taylorbryant/next-starter-tailwind.git"
+  },
+  "author": "Yashiro Horie",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/taylorbryant/next-starter-tailwind/issues"
+  },
+  "homepage": "https://github.com/taylorbryant/next-starter-tailwind#readme",
   "dependencies": {
-    "@reduxjs/toolkit": "^1.5.0",
-    "@web3-react/core": "^6.1.9",
-    "classnames": "^2.3.1",
-    "cross-env": "^7.0.3",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-redux": "^7.2.4",
-    "react-router-dom": "^5.2.0",
-    "styled-components": "^5.3.3",
-    "web3": "^1.6.1",
-    "web3modal": "^1.9.4"
+    "next": "11.1.2",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "tailwind-react-ui": "^0.8.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.14.2",
-    "@babel/polyfill": "^7.12.1",
-    "@babel/preset-env": "^7.14.2",
-    "@babel/preset-react": "^7.12.7",
-    "@pmmmwh/react-refresh-webpack-plugin": "^0.4.3",
-    "@testing-library/jest-dom": "^5.12.0",
-    "@testing-library/react": "^11.2.7",
-    "@testing-library/user-event": "^13.1.9",
-    "autoprefixer": "^10.2.3",
-    "babel-loader": "^8.2.1",
-    "css-loader": "^5.2.4",
-    "eslint-plugin-jest-dom": "^3.9.0",
-    "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-testing-library": "^4.4.0",
-    "html-webpack-plugin": "^5.3.1",
-    "jest": "^26.6.3",
-    "mini-css-extract-plugin": "^1.6.0",
-    "postcss": "^8.2.15",
-    "postcss-loader": "^5.3.0",
-    "react-refresh": "^0.10.0",
-    "style-loader": "^2.0.0",
-    "tailwindcss": "^2.1.2",
-    "webpack": "^5.37.0",
-    "webpack-cli": "^4.7.0",
-    "webpack-dev-server": "^3.11.2"
+    "autoprefixer": "10.3.4",
+    "classnames": "2.3.1",
+    "eslint": "7.32.0",
+    "eslint-config-next": "11.1.2",
+    "postcss": "8.3.6",
+    "postcss-100vh-fix": "1.0.2",
+    "postcss-flexbugs-fixes": "5.0.2",
+    "postcss-hover-media-feature": "1.0.1",
+    "postcss-preset-env": "6.7.0",
+    "tailwindcss": "2.2.15"
   }
 }
