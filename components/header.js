@@ -2,7 +2,7 @@ import Link from "next/link";
 import { useState } from "react";
 import cn from "classnames";
 import Image from "next/image";
-import { TailwindThemeProvider, FillButton } from "tailwind-react-ui"
+import { TailwindThemeProvider, FillButton, LinkButton } from "tailwind-react-ui"
 
 export default function Header() {
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState(false);
@@ -57,7 +57,7 @@ export default function Header() {
               </Link>
             </li>
           ))} */}
-          <FillButton  brand="primary">Connect Wallet</FillButton>
+          <FillButton  className="bg-gray-600">Connect Wallet</FillButton>
         </ul>
       </div>
     </header>

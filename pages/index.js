@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { FillButton } from "tailwind-react-ui"
 
 export default function IndexPage() {
   return (
@@ -10,10 +11,9 @@ export default function IndexPage() {
         height={429.734}
         priority
       /> */}
-
-      <h2 className="p-3 font-bold bg-yellow-300 md:text-2xl">
-        Hi! Welcome to your first Next.js site.
-      </h2>
+      <FillButton className="bg-gray-700">
+        Wallet Balance
+      </FillButton>
     </div>
   );
 }
