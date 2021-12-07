@@ -1,3 +1,27 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.linkColor {
+  background-color: #ffedd1!important
+}
+
+.button-primary {
+
+}
+
+.button-second {
+
+}
+
+.button-primary:hover {
+  box-shadow: 4px 4px 0 #ffea51;
+}
+
+.button-second:hover {
+  box-shadow: 4px 4px 0 #a34ffe;
+}
+
+.card-boxshadow {
+  box-shadow: 30px 30px 0 #ffedd1;
+}
