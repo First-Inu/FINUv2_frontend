@@ -1,5 +1,5 @@
 export default function WalletBalance(props) {
-	const balance = 99999
+  const balance = props.balance ? props.balance : 0
 
   return (
     <div className={"flex items-center rounded bg-gray-100 px-3 py-1 " + (props.className ? props.className : '')}>

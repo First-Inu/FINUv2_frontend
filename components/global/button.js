@@ -1,8 +1,8 @@
 export default function Button(props) {
-  let classes = ''
+  let classes = ' '
 
   if (props.type)
-    classes = "button-" + props.type
+    classes = " button-" + props.type
 
   const handleClick = (event) => {
     if (props.onClick)
@@ -11,7 +11,7 @@ export default function Button(props) {
 
   return (
     <button
-      className={classes + " rounded px-4 py-4 focus:outline-none " + props.className}
+      className={props.className + classes + " rounded focus:outline-none"}
       onClick={handleClick}
     >
       {props.name}

@@ -6,8 +6,11 @@ import Balance from "./wallet/balance";
 import WalletLink from "./wallet/wallet-link";
 import Network from "./global/network";
 import BnbClaim from "./wallet/bnb-claim";
+import { useSelector } from "react-redux";
 
 export default function Swap() {
+  const address = useSelector(state => state.web3.address)
+
   return (
     <div className="flex-1 flex flex-col justify-center text-center px-6">
       <Title title="BRIDGE" />
@@ -17,11 +20,11 @@ export default function Swap() {
         {'ETH <> BSC Bridge'}
       </h1>
 
-      <article className="text-left mt-10">
+      {address ? <article className="text-left mt-10">
         <InfoMessage />
-      </article>
+      </article> : null}
 
-      <Balance></Balance>
+      <Balance className="mt-10"></Balance>
 
       <WalletLink></WalletLink>
 

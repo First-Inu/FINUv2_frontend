@@ -1,29 +1,51 @@
 import Link from "next/link";
 import { useState, useEffect, useCallback } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import cn from "classnames";
 import Image from "next/image";
 import Button from "./global/button";
 import web3Modal from "../utils/web3modal"
 import WalletBalance from "./wallet/wallet-balance";
 import Address from "./wallet/address";
-import { setWeb3 } from "store/web3"
+import { getBalance, setAddress, setWallet } from "store/web3"
 import Web3 from "web3";
 
 export default function Header() {
-
-
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState(false);
+  const wallet = useSelector(state => state.web3)
+
+  useEffect(() => {
+    if (web3Modal.cachedProvider)
+      connectWallet()
+  }, [])
 
   const dispatch = useDispatch();
 
-  const handleClick = async () => {
-    await web3Modal.clearCachedProvider()
+  const connectWallet = async() => {
     const provider = await web3Modal.connect()
-    const web3 = new Web3(provider)
-    const address = await web3.eth.getAccounts()
-    const balance = await web3.eth.getBalance(address[0])
-    dispatch(setWeb3({web3}))
+    const web3Object = new Web3(provider)
+
+    const acounts = await web3Object.eth.getAccounts()
+
+    dispatch(setWallet({
+      web3object: web3Object,
+      address: acounts[0],
+    }))
+
+    dispatch(getBalance(acounts[0]))
+  }
+
+  const handleClick = async () => {
+    if (wallet.address) {
+      dispatch(setWallet({
+        web3object: null,
+        balance: 0,
+        address: '',
+      }))
+    } else {
+      await web3Modal.clearCachedProvider()
+      connectWallet()
+    }
   }
 
   const ConnectButton = ({ className, address }) => (
@@ -95,8 +117,8 @@ export default function Header() {
             ))}
           </div>
           <div className="md:flex items-center">
-            <WalletBalance> </WalletBalance>
-            <Address className="ml-6"> </Address>
+            {wallet.address ? <WalletBalance balance={wallet.balance} > </WalletBalance> : null}
+            {wallet.address ? <Address className="ml-6" address={wallet.address}> </Address> : null}
             <Button
               type="second"
               className="
@@ -110,7 +132,7 @@ export default function Header() {
                 shadow-md
                 ml-6
               "
-              name="Connect Wallet"
+              name={wallet.address ? "Disconnect Wallet" : "Connect Wallet"}
               onClick={handleClick}
             >
             </Button>
