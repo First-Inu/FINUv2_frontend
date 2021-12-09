@@ -8,8 +8,8 @@ const store = makeStore()
 
 function MyApp({ Component, pageProps }) {
   return (
-    <Layout>
-      <Provider store = {store}>
+    <Provider store = {store}>
+      <Layout>
         <Head>
           <title> FINU </title>
           <meta
@@ -17,9 +17,10 @@ function MyApp({ Component, pageProps }) {
             content="FINU Landing Page"
           />
         </Head>
+
         <Component {...pageProps} />
-      </Provider>
-    </Layout>
+      </Layout>
+    </Provider>
   );
 }
 
