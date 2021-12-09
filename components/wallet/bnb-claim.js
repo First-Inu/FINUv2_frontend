@@ -1,6 +1,17 @@
+import ClaimModal from "@components/claim/claim-modal";
 import Card from "@components/global/card";
+import { useState } from "react";
 
 export default function BnbClaim(props) {
+  const [modalState, setModalState] = useState(false)
+  const closeModal = () => {
+    setModalState(false)
+  }
+
+  const showModal = () => {
+    setModalState(true)
+  }
+
   return (
     <Card className="flex flex-row justify-between text-left mt-12 bg-white mb-32">
       <div>
@@ -11,10 +22,11 @@ export default function BnbClaim(props) {
       </div>
       <button
         className="bg-gradient-to-tr from-purple-500 to-purple-700 px-4 py-2 rounded text-white font-semibold focus:border-0"
-        v-if="address !== null"
+        onClick={showModal}
       >
-        Nothing to Clain
+        Claim Now
       </button>
+      <ClaimModal show={modalState} handleClose={closeModal}></ClaimModal>
     </Card>
   );
 }

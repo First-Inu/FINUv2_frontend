@@ -9,7 +9,7 @@ import BnbClaim from "./wallet/bnb-claim";
 import { useSelector } from "react-redux";
 
 export default function Swap() {
-  const address = useSelector(state => state.web3.address)
+  const address = useSelector(state => state.web3.wallet.address)
 
   return (
     <div className="flex-1 flex flex-col justify-center text-center px-6">

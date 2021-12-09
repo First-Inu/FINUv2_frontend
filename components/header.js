@@ -12,7 +12,7 @@ import Web3 from "web3";
 
 export default function Header() {
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState(false);
-  const wallet = useSelector(state => state.web3)
+  const wallet = useSelector(state => state.web3.wallet)
 
   useEffect(() => {
     if (web3Modal.cachedProvider)
@@ -26,6 +26,28 @@ export default function Header() {
     const web3Object = new Web3(provider)
 
     const acounts = await web3Object.eth.getAccounts()
+    const chainId = await web3Object.eth.net.getId()
+
+
+    provider.on("accountsChanged", async () => {
+      dispatch(getBalance(acounts[0]))
+    });
+
+    // Subscribe to chainId change
+    provider.on("chainChanged", async (chainId) => {
+      dispatch(chainIdChanged())
+      dispatch(getBalance(acounts[0]))
+    });
+
+    // Subscribe to provider connection
+    provider.on("connect", (info) => {
+      console.log(info);
+    });
+
+    // Subscribe to provider disconnection
+    provider.on("disconnect", (error) => {
+      console.log(error);
+    });
 
     dispatch(setWallet({
       web3object: web3Object,
@@ -41,6 +63,7 @@ export default function Header() {
         web3object: null,
         balance: 0,
         address: '',
+        chainId: chainId
       }))
     } else {
       await web3Modal.clearCachedProvider()

@@ -9,7 +9,7 @@ import Button from "@components/global/button";
 
 export default function Balance(props) {
 
-  const balance = useSelector(state => state.web3.balance)
+  const balance = useSelector(state => state.web3.wallet.balance)
 
   const [amount, setAmount] = useState(0)
 
