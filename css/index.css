@@ -7,11 +7,11 @@
 }
 
 .button-primary {
-
+  z-index: 0;
 }
 
 .button-second {
-
+  z-index: 0;
 }
 
 .button-primary:hover {
