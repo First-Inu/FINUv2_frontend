@@ -63,7 +63,7 @@ export default function Header() {
         web3object: null,
         balance: 0,
         address: '',
-        chainId: chainId
+        chainId: 0
       }))
     } else {
       await web3Modal.clearCachedProvider()

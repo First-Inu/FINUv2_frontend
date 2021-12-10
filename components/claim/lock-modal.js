@@ -98,7 +98,7 @@ export default function LockModal(props) {
             Please save <span className="text-yellow-500"> Swap ID or Unique Identifer </span> for claiming.
             <br />
             <br />
-            You're not able to claim tokens converted without it.
+            {"You're not able to claim tokens converted without it."}
           </div>
           <hr />
           <div className="pt-10">
