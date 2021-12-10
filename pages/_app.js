@@ -1,5 +1,5 @@
 import "../css/index.css";
-// import "../css/custom.css";
+import "../css/custom.css";
 import Head from "next/head";
 import Layout from "@components/layout";
 import { makeStore } from '../store'
