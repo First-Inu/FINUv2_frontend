@@ -14,14 +14,7 @@ export default function Header() {
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState(false);
   const wallet = useSelector(state => state.web3.wallet)
 
-  useEffect(() => {
-    if (web3Modal.cachedProvider)
-      connectWallet()
-  }, [])
-
-  const dispatch = useDispatch();
-
-  const connectWallet = async() => {
+  const connectWallet = async () => {
     const provider = await web3Modal.connect()
     const web3Object = new Web3(provider)
 
@@ -56,6 +49,13 @@ export default function Header() {
 
     dispatch(getBalance(acounts[0]))
   }
+
+  useEffect(() => {
+    if (web3Modal.cachedProvider)
+      connectWallet()
+  }, [])
+
+  const dispatch = useDispatch();
 
   const handleClick = async () => {
     if (wallet.address) {
