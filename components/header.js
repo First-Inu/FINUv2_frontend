@@ -23,8 +23,8 @@ export default function Header() {
     const chainId = await web3Object.eth.net.getId()
 
 
-    provider.on("accountsChanged", async () => {
-      dispatch(getBalance(acounts[0]))
+    provider.on("accountsChanged", (accounts) => {
+      location.reload()
     });
 
     // Subscribe to chainId change
@@ -111,7 +111,7 @@ export default function Header() {
         </div>
 
         <button
-          className="flex items-center block px-3 py-2 border border-white rounded md:hidden"
+          className="flex items-center block px-3 py-2 border border-white rounded lg:hidden"
           onClick={() => setMobileMenuIsOpen(!mobileMenuIsOpen)}
         >
           <svg
@@ -126,11 +126,11 @@ export default function Header() {
 
         <ul
           className={cn(
-            "md:flex flex-col md:flex-row md:items-center md:justify-between text-sm w-full md:w-auto flex-1",
+            "lg:flex flex-col lg:flex-row lg:items-center lg:justify-between text-sm w-full lg:w-auto flex-1",
             mobileMenuIsOpen ? `block` : `hidden`
           )}
         >
-          <div className="md:flex">
+          <div className="lg:flex">
             {[
               { title: "Stacking", route: "/stacking" },
               { title: "Bridge", route: "/bridge" },
@@ -142,9 +142,9 @@ export default function Header() {
               </li>
             ))}
           </div>
-          <div className="md:flex items-center">
-            {wallet.address ? <WalletBalance balance={wallet.balance} > </WalletBalance> : null}
-            {wallet.address ? <Address className="ml-6" address={wallet.address}> </Address> : null}
+          <div className="lg:flex items-center">
+            {wallet.address ? <WalletBalance className="mt-2 lg:mt-0" balance={wallet.balance} > </WalletBalance> : null}
+            {wallet.address ? <Address className="lg:ml-6 mt-2 lg:mt-0" address={wallet.address}> </Address> : null}
             <Button
               type="second"
               className="
@@ -156,7 +156,9 @@ export default function Header() {
                 py-2
                 rounded
                 shadow-md
-                ml-6
+                lg:ml-6
+                mt-2
+                lg:mt-0
               "
               name={wallet.address ? "Disconnect Wallet" : "Connect Wallet"}
               onClick={handleClick}
