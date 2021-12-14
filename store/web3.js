@@ -6,7 +6,7 @@ import bnbAbi from "utils/contracts/bnb-abi.json"
 import TokenAddress from "utils/contracts/token-address.json"
 import Web3 from "web3"
 import Contract from 'web3-eth-contract'
-import { addClaimId } from 'utils/axios'
+import { addClaimId, lockInfo, checkClaim } from 'utils/axios'
 
 const providerOptions = {
   walletconnect: {
@@ -25,9 +25,36 @@ export const getBalance = createAsyncThunk(
   async (address, thunkAPI) => {
     try {
       const tokenBalance = await finuContract.methods.balanceOf(address).call()
-      console.log(tokenBalance)
       thunkAPI.dispatch(setBalance(tokenBalance))
       return tokenBalance
+    } catch (error) {
+      console.log(error)
+    }
+  }
+)
+
+export const getHistory = createAsyncThunk(
+  'web3/history',
+  async (address, thunkAPI) => {
+    try {
+      const data = {
+        address: address
+      }
+
+      const history = await lockInfo(data)
+      const web3 = thunkAPI.getState().web3.wallet.web3object
+
+      if (history.data.status) {
+        const lockHistory = history.data.data.map(item => {
+          return {
+            claimId: item.claimId,
+            u_identifier: item.u_identifier,
+            amount: web3.utils.fromWei(item.amount, 'picoether')
+          }
+        })
+        thunkAPI.dispatch(setHistory(lockHistory))
+      }
+      return history
     } catch (error) {
       console.log(error)
     }
@@ -38,7 +65,6 @@ export const claimToken = createAsyncThunk(
   'web3/claimToken',
   async (req, thunkAPI) => {
     try {
-      console.log(req)
       const web3object = thunkAPI.getState().web3.wallet.web3object
       const address = thunkAPI.getState().web3.wallet.address
       const chainId = thunkAPI.getState().web3.wallet.chainId
@@ -49,10 +75,22 @@ export const claimToken = createAsyncThunk(
       const response = await tokenContract.methods.claimToken(parseInt(req.claimId), parseInt(req.u_identifier), address, tokenAmount).send({
         from: thunkAPI.getState().web3.wallet.address
       })
-      // thunkAPI.dispatch(setBalance(tokenBalance))
+
+      const tokenBalance = await finuContract.methods.balanceOf(address).call()
+      const responseLockInfo = await lockInfo({ address: address })
+
+      await checkClaim({
+        identifier: req.u_identifier,
+        claim_id: req.claimId,
+        amount: tokenAmount,
+      })
+
+      thunkAPI.dispatch(setBalance(tokenBalance))
+      dispatch(getHistory(address))
       // return tokenBalance
-      console.log(response)
+      alert("Token claim is complete. Please check your wallet.")
     } catch (error) {
+      alert("Error: Failed to claim token")
       console.log(error)
     }
   }
@@ -86,6 +124,7 @@ export const lockToken = createAsyncThunk(
         u_identifier: responseData.data.data.u_identifier,
         amount: amount
       }
+
       thunkAPI.dispatch(lockResponse(lockdata))
       thunkAPI.dispatch(setBalance(tokenBalance))
       return swapID
@@ -108,6 +147,9 @@ const webSlice = createSlice({
       claimId: 0,
       u_identifier: 0,
       amount: 0
+    },
+    history: {
+
     }
   },
   reducers: {
@@ -115,6 +157,10 @@ const webSlice = createSlice({
       if (state.wallet.web3object) {
         state.wallet.balance = state.wallet.web3object.utils.fromWei(payload, 'shannon')
       }
+    },
+
+    setHistory: (state, { payload }) => {
+      state.history = payload
     },
 
     lockResponse: (state, { payload }) => {
@@ -136,9 +182,7 @@ const webSlice = createSlice({
 
       if (TokenAddress.TOKEN_ADDRESS[chainId]) {
         finuContract = new state.wallet.web3object.eth.Contract(ercAbi, TokenAddress.TOKEN_ADDRESS[chainId])
-        console.log(finuContract, '--contract')
         tokenContract = new wallet.web3object.eth.Contract(abi, TokenAddress.CONTRACT_ADDRESSS[chainId])
-        console.log(abi, chainId, tokenContract, '-----tokenContract')
       }
     },
 
@@ -164,6 +208,7 @@ const webSlice = createSlice({
           tokenContract = new wallet.web3object.eth.Contract(abi, TokenAddress.CONTRACT_ADDRESSS[wallet.chainId])
         }
       } else {
+        state.history = []
         tokenContract = null
         finuContract = null
         state.wallet.balance = 0
@@ -191,12 +236,16 @@ const webSlice = createSlice({
       // Add user to the state array
       // state.entities.push(action.payload)
     })
+    builder.addCase(getHistory.fulfilled, (state, action) => {
+      // Add user to the state array
+      // state.entities.push(action.payload)
+    })
     builder.addCase(claimToken.fulfilled, (state, action) => {
 
     })
   },
 })
 
-export let { connectWallet, setWeb3Object, setBalance, setAddress, setWallet, decrease, lockResponse, chainIdChanged } = webSlice.actions
+export let { connectWallet, setWeb3Object, setBalance, setAddress, setWallet, setHistory, decrease, lockResponse, chainIdChanged } = webSlice.actions
 
 export default webSlice.reducer
