@@ -7,7 +7,7 @@ import Button from "./global/button";
 import web3Modal from "../utils/web3modal"
 import WalletBalance from "./wallet/wallet-balance";
 import Address from "./wallet/address";
-import { getBalance, setAddress, setWallet } from "store/web3"
+import { getBalance, setAddress, setWallet, chainIdChanged } from "store/web3"
 import Web3 from "web3";
 
 export default function Header() {
@@ -16,6 +16,7 @@ export default function Header() {
 
   const connectWallet = async () => {
     const provider = await web3Modal.connect()
+    console.log(provider, '--------')
     const web3Object = new Web3(provider)
 
     const acounts = await web3Object.eth.getAccounts()
@@ -28,25 +29,27 @@ export default function Header() {
 
     // Subscribe to chainId change
     provider.on("chainChanged", async (chainId) => {
-      dispatch(chainIdChanged())
+      dispatch(chainIdChanged(chainId))
+      console.log('chain changed')
       dispatch(getBalance(acounts[0]))
     });
 
     // Subscribe to provider connection
     provider.on("connect", (info) => {
-      console.log(info);
+      // console.log(info);
     });
 
     // Subscribe to provider disconnection
     provider.on("disconnect", (error) => {
-      console.log(error);
+      // console.log(error);
     });
 
     dispatch(setWallet({
       web3object: web3Object,
       address: acounts[0],
+      chainId: chainId,
     }))
-
+    console.log('connet chain')
     dispatch(getBalance(acounts[0]))
   }
 

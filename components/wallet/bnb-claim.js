@@ -1,12 +1,20 @@
 import ClaimModal from "@components/claim/claim-modal";
 import Card from "@components/global/card";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function BnbClaim(props) {
   const [modalState, setModalState] = useState(false)
   const closeModal = () => {
     setModalState(false)
   }
+
+  const chainId = useSelector(state => state.web3.wallet.chainId)
+  const [btnVisible, setBtnVisible] = useState((chainId == 97 || chainId == 56))
+
+  useEffect(()=> {
+    setBtnVisible((chainId == 97 || chainId == 56))
+  }, [chainId])
 
   const showModal = () => {
     setModalState(true)
@@ -21,7 +29,7 @@ export default function BnbClaim(props) {
         </div>
       </div>
       <button
-        className="bg-gradient-to-tr from-purple-500 to-purple-700 px-4 py-2 rounded text-white font-semibold focus:border-0"
+        className={"bg-gradient-to-tr from-purple-500 to-purple-700 px-4 py-2 rounded text-white font-semibold focus:border-0" + (btnVisible ? '' : ' hidden') }
         onClick={showModal}
       >
         Claim Now

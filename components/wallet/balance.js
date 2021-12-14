@@ -10,6 +10,7 @@ import Button from "@components/global/button";
 export default function Balance(props) {
 
   const balance = useSelector(state => state.web3.wallet.balance)
+  const chainId = useSelector(state => state.web3.wallet.chainId)
 
   const [amount, setAmount] = useState(0)
 
@@ -27,10 +28,11 @@ export default function Balance(props) {
   }
 
   const handleClick = (event) => {
-    dispatch(lockToken(amount))
+    if (amount && chainId)
+      dispatch(lockToken(amount))
   }
 
-  let classes = amount ? 'bg-gradient-to-tr from-purple-500 to-purple-700 button-hover' : 'cursor-not-allowed bg-gray-300 hover:shadow-none'
+  let classes = (amount && chainId) ? 'bg-gradient-to-tr from-purple-500 to-purple-700 button-hover' : 'cursor-not-allowed bg-gray-300 hover:shadow-none'
 
   return (
     <Card className={props.className}>
