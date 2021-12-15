@@ -86,7 +86,7 @@ export const claimToken = createAsyncThunk(
       })
 
       thunkAPI.dispatch(setBalance(tokenBalance))
-      dispatch(getHistory(address))
+      thunkAPI.dispatch(getHistory(address))
       // return tokenBalance
       alert("Token claim is complete. Please check your wallet.")
     } catch (error) {
