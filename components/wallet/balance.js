@@ -4,12 +4,14 @@ import InputBox from "@components/global/input-box";
 import BalanceStatus from "./balance-info";
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { lockToken, getBalance, setAddress } from "store/web3";
+import { lockToken, getBalance, setAddress, getHistory } from "store/web3";
 import Button from "@components/global/button";
 
 export default function Balance(props) {
 
   const balance = useSelector(state => state.web3.wallet.balance)
+  const chainId = useSelector(state => state.web3.wallet.chainId)
+  const address = useSelector(state => state.web3.wallet.address)
 
   const [amount, setAmount] = useState(0)
 
@@ -27,10 +29,12 @@ export default function Balance(props) {
   }
 
   const handleClick = (event) => {
-    dispatch(lockToken(amount))
+    if (amount && chainId) {
+      dispatch(lockToken(amount))
+    }
   }
 
-  let classes = amount ? 'bg-gradient-to-tr from-purple-500 to-purple-700 button-hover' : 'cursor-not-allowed bg-gray-300 hover:shadow-none'
+  let classes = (amount && chainId) ? 'bg-gradient-to-tr from-purple-500 to-purple-700 button-hover' : 'cursor-not-allowed bg-gray-300 hover:shadow-none'
 
   return (
     <Card className={props.className}>

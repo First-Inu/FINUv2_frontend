@@ -1,8 +1,46 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { claimToken } from "store/web3";
+
 
 export default function ClaimModal(props) {
+  const [claimId, setClaimId] = useState(0)
+  const [u_identifier, setIdentifier] = useState(0)
+  const [amount, setAmount] = useState(0)
+  const [active, setActive] = useState(false)
+
   const handleClose = () => {
     props.handleClose()
+  }
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    setActive(claimId && u_identifier && amount)
+  }, [claimId, u_identifier, amount])
+
+  const handleClaimToken = () => {
+    setActive(false)
+    dispatch(claimToken({
+      claimId: claimId,
+      u_identifier: u_identifier,
+      amount: amount
+    }))
+  }
+
+  const handleSwapId = (event) => {
+    // claimId = event.target.value
+    setClaimId(event.target.value)
+  }
+
+  const handleIdentifier = (event) => {
+    // u_identifier = event.target.value
+    setIdentifier(event.target.value)
+  }
+
+  const handleAmount = (event) => {
+    // amount = event.target.value
+    setAmount(event.target.value)
   }
 
   return (
@@ -90,6 +128,7 @@ export default function ClaimModal(props) {
               type="text"
               placeholder="Swap ID"
               className="bg-white border-2 rounded px-3 py-1 my-4 w-full"
+              onChange={handleSwapId}
             />
           </div>
           <div className="pt-2">
@@ -98,6 +137,7 @@ export default function ClaimModal(props) {
               type="text"
               placeholder="Unique Identifier"
               className="bg-white border-2 rounded px-3 py-1 my-4 w-full"
+              onChange={handleIdentifier}
             />
           </div>
           <div className="pt-2">
@@ -106,6 +146,7 @@ export default function ClaimModal(props) {
               type="number"
               placeholder="Swapped Amount"
               className="bg-white border-2 rounded px-3 py-1 my-4 w-full"
+              onChange={handleAmount}
             />
           </div>
           <div
@@ -123,7 +164,7 @@ export default function ClaimModal(props) {
         <hr className="my-10" />
         <div className="flex justify-end px-6 pb-4">
           <button
-            className="
+            className={`
               text-black
               bg-gradient-to-tr
               from-yellow-200
@@ -133,8 +174,8 @@ export default function ClaimModal(props) {
               rounded
               shadow-md
               m-2
-            "
-            onClick={handleClose}
+            ` + (active ? '' : ' hidden')}
+            onClick={handleClaimToken}
           >
             Clain Now
           </button>

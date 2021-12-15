@@ -1,33 +1,41 @@
-import { useEffect, useState } from "react";
+import { loadGetInitialProps } from "next/dist/shared/lib/utils";
+import { useContext, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { lockResponse } from "store/web3";
 
-export default function LockModal(props) {
-  const claimId = useSelector(state => state.web3.claim.claimId)
-  const u_identifier = useSelector(state => state.web3.claim.u_identifier)
-  const amount = useSelector(state => state.web3.claim.amount)
-  const [show, setShow] = useState(false)
+export default function LockInfoModal(props) {
+  const handleClose = () => {
+    props.handleClose(false)
+  }
+
+  const history = useSelector(state => state.web3.history)
+
+  const [rows, setRows] = useState([])
+
+  useEffect(() => {
+    let items = []
+    for (let i = 0; i < history.length; i++) {
+      items.push(
+        <tr key={i + '_claim'}>
+          <td>
+            {history[i].claimId}
+          </td>
+          <td>
+            {history[i].u_identifier}
+          </td>
+          <td>
+            {history[i].amount}
+          </td>
+        </tr>
+      )
+    }
+    setRows(items)
+  }, [history])
 
   const dispatch = useDispatch()
 
-  useEffect(() => {
-    setShow(claimId)
-  }, [
-    claimId
-  ])
-
-  const handleClose = () => {
-    // dispatch(lockResponse({
-    //   claimId: 0,
-    //   u_identifier: 0,
-    //   amount: ''
-    // }))
-    setShow(false)
-  }
-
   return (
     <div
-      className={"justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none text-left " + (show ? "" : "hidden")}
+      className={"justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none text-left " + (props.show ? "" : "hidden")}
     >
       <div
         className="fixed inset-0 transition-opacity"
@@ -77,8 +85,7 @@ export default function LockModal(props) {
           bg-white
           z-30
           mx-4
-          sm:mx-auto
-          Modal-Size
+          lg:w-1/2
         "
       >
         <div
@@ -91,39 +98,32 @@ export default function LockModal(props) {
             bg-gray-100
           "
         >
-          Claim your $FINU
+          History
         </div>
-        <div className="px-8 text-black text-lg font-semibold">
-          <div className="py-10">
-            Please save <span className="text-yellow-500"> Swap ID or Unique Identifer </span> for claiming.
-            <br />
-            <br />
-            {"You're not able to claim tokens converted without it."}
-          </div>
-          <hr />
-          <div className="pt-10">
-            <div>Swap ID</div>
-            <div className="bg-white border-2 rounded px-3 py-1 my-4 w-full">
-              {claimId}
-            </div>
-          </div>
-          <div className="pt-2">
-            <div>Unique Identifier</div>
-            <div className="bg-white border-2 rounded px-3 py-1 my-4 w-full">
-              {u_identifier}
-            </div>
-          </div>
-          <div className="pt-2">
-            <div>Swapped Amount</div>
-            <div className="bg-white border-2 rounded px-3 py-1 my-4 w-full">
-              {amount}
-            </div>
-          </div>
+        <div className="py-10 text-center">
+          To claim your tokens, all you have to do is switch to the
+          <span className="text-yellow-500"> {' bnb network '}</span>
+          on your wallet.
+        </div>
+        <hr />
+        <div className="pt-10 flex items-center justify-center px-10">
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th> SwapID </th>
+                <th> Identifier </th>
+                <th> Amount </th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows}
+            </tbody>
+          </table>
         </div>
         <hr className="my-10" />
         <div className="flex justify-end px-6 pb-4">
           <button
-            className="
+            className={`
               text-black
               bg-gradient-to-tr
               from-yellow-200
@@ -133,7 +133,7 @@ export default function LockModal(props) {
               rounded
               shadow-md
               m-2
-            "
+            `}
             onClick={handleClose}
           >
             Okay

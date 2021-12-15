@@ -7,21 +7,14 @@ import Button from "./global/button";
 import web3Modal from "../utils/web3modal"
 import WalletBalance from "./wallet/wallet-balance";
 import Address from "./wallet/address";
-import { getBalance, setAddress, setWallet } from "store/web3"
+import { getBalance, getHistory, setAddress, setWallet, chainIdChanged } from "store/web3"
 import Web3 from "web3";
 
 export default function Header() {
   const [mobileMenuIsOpen, setMobileMenuIsOpen] = useState(false);
   const wallet = useSelector(state => state.web3.wallet)
 
-  useEffect(() => {
-    if (web3Modal.cachedProvider)
-      connectWallet()
-  }, [])
-
-  const dispatch = useDispatch();
-
-  const connectWallet = async() => {
+  const connectWallet = async () => {
     const provider = await web3Modal.connect()
     const web3Object = new Web3(provider)
 
@@ -29,33 +22,50 @@ export default function Header() {
     const chainId = await web3Object.eth.net.getId()
 
 
-    provider.on("accountsChanged", async () => {
-      dispatch(getBalance(acounts[0]))
+    provider.on("accountsChanged", (accounts) => {
+      location.reload()
     });
 
     // Subscribe to chainId change
     provider.on("chainChanged", async (chainId) => {
-      dispatch(chainIdChanged())
+
+      dispatch(chainIdChanged(chainId))
+
       dispatch(getBalance(acounts[0]))
+
+      if (chainId == 1 || chainId == 4)
+        dispatch(getHistory(acounts[0]))
     });
 
     // Subscribe to provider connection
     provider.on("connect", (info) => {
-      console.log(info);
+      // console.log(info);
     });
 
     // Subscribe to provider disconnection
     provider.on("disconnect", (error) => {
-      console.log(error);
+      // console.log(error);
     });
 
     dispatch(setWallet({
       web3object: web3Object,
       address: acounts[0],
+      chainId: chainId,
     }))
+    console.log('connet chain')
+
+    if (chainId == 1 || chainId == 4)
+      dispatch(getHistory(acounts[0]))
 
     dispatch(getBalance(acounts[0]))
   }
+
+  useEffect(() => {
+    if (web3Modal.cachedProvider && !(wallet.address))
+      connectWallet()
+  }, [])
+
+  const dispatch = useDispatch();
 
   const handleClick = async () => {
     if (wallet.address) {
@@ -63,7 +73,7 @@ export default function Header() {
         web3object: null,
         balance: 0,
         address: '',
-        chainId: chainId
+        chainId: 0
       }))
     } else {
       await web3Modal.clearCachedProvider()
@@ -108,7 +118,7 @@ export default function Header() {
         </div>
 
         <button
-          className="flex items-center block px-3 py-2 border border-white rounded md:hidden"
+          className="flex items-center block px-3 py-2 border border-white rounded lg:hidden"
           onClick={() => setMobileMenuIsOpen(!mobileMenuIsOpen)}
         >
           <svg
@@ -123,11 +133,11 @@ export default function Header() {
 
         <ul
           className={cn(
-            "md:flex flex-col md:flex-row md:items-center md:justify-between text-sm w-full md:w-auto flex-1",
+            "lg:flex flex-col lg:flex-row lg:items-center lg:justify-between text-sm w-full lg:w-auto flex-1",
             mobileMenuIsOpen ? `block` : `hidden`
           )}
         >
-          <div className="md:flex">
+          <div className="lg:flex">
             {[
               { title: "Stacking", route: "/stacking" },
               { title: "Bridge", route: "/bridge" },
@@ -139,9 +149,9 @@ export default function Header() {
               </li>
             ))}
           </div>
-          <div className="md:flex items-center">
-            {wallet.address ? <WalletBalance balance={wallet.balance} > </WalletBalance> : null}
-            {wallet.address ? <Address className="ml-6" address={wallet.address}> </Address> : null}
+          <div className="lg:flex items-center">
+            {wallet.address ? <WalletBalance className="mt-2 lg:mt-0" balance={wallet.balance} > </WalletBalance> : null}
+            {wallet.address ? <Address className="lg:ml-6 mt-2 lg:mt-0" address={wallet.address}> </Address> : null}
             <Button
               type="second"
               className="
@@ -153,7 +163,9 @@ export default function Header() {
                 py-2
                 rounded
                 shadow-md
-                ml-6
+                lg:ml-6
+                mt-2
+                lg:mt-0
               "
               name={wallet.address ? "Disconnect Wallet" : "Connect Wallet"}
               onClick={handleClick}

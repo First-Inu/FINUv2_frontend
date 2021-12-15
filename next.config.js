@@ -4,6 +4,6 @@ module.exports = {
     formats: ['image/avif', 'image/webp'],
   },
   env: {
-    serverUrl: 'http://localhost:8001'
+    serverUrl: 'https://finu-bridge-backend.herokuapp.com'
   }
 }
