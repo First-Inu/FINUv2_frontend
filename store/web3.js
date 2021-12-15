@@ -127,6 +127,7 @@ export const lockToken = createAsyncThunk(
 
       thunkAPI.dispatch(lockResponse(lockdata))
       thunkAPI.dispatch(setBalance(tokenBalance))
+      thunkAPI.dispatch(getHistory(address))
       return swapID
     } catch (error) {
       console.log(error)

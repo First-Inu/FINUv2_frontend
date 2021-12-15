@@ -31,7 +31,6 @@ export default function Balance(props) {
   const handleClick = (event) => {
     if (amount && chainId) {
       dispatch(lockToken(amount))
-      dispatch(getHistory(address))
     }
   }
 
