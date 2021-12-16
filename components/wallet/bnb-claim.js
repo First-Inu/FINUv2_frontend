@@ -13,15 +13,15 @@ export default function BnbClaim(props) {
   }
 
   const chainId = useSelector(state => state.web3.wallet.chainId)
-  const [btnVisible, setBtnVisible] = useState((chainId == 97 || chainId == 56))
+  const [btnVisible, setBtnVisible] = useState((chainId == process.env.smart_chain_id))
 
   /*
   * chainId ( 97 : BINANCE SMART MAIN NETWORK)
   * chainId ( 56 : BINANCE SMART TEST NETWORK)
   */
   useEffect(()=> {
-    setBtnVisible((chainId == 97 || chainId == 56))
-    if ((chainId != 97 && chainId != 56))
+    setBtnVisible(chainId == process.env.smart_chain_id)
+    if (chainId != process.env.smart_chain_id)
       setModalState(false)
   }, [chainId])
 
@@ -42,13 +42,13 @@ export default function BnbClaim(props) {
         </div>
       </div>
       <button
-        className={"bg-gradient-to-tr from-purple-500 to-purple-700 px-4 py-2 rounded text-white font-semibold focus:border-0" + (btnVisible ? '' : ' hidden') }
+        className={"bg-gradient-to-tr from-purple-500 to-purple-700 px-4 py-2 rounded text-white font-semibold focus:border-0 button-primary" + (btnVisible ? '' : ' hidden') }
         onClick={showModal}
       >
         Claim Now
       </button>
       <button
-        className={"bg-gradient-to-tr from-purple-500 to-purple-700 px-4 py-2 rounded text-white font-semibold focus:border-0" + (btnVisible ? ' hidden' : '') }
+        className={"bg-gradient-to-tr from-purple-500 to-purple-700 px-4 py-2 rounded text-white font-semibold focus:border-0 button-primary" + (btnVisible ? ' hidden' : '') }
         onClick={handleLockModal}
       >
         View History

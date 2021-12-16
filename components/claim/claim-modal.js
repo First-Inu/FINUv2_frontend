@@ -1,3 +1,4 @@
+import Button from "@components/global/button";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { claimToken } from "store/web3";
@@ -7,7 +8,8 @@ export default function ClaimModal(props) {
   const [claimId, setClaimId] = useState(0)
   const [u_identifier, setIdentifier] = useState(0)
   const [amount, setAmount] = useState(0)
-  const [active, setActive] = useState(false)
+  const [classes, setClasses] = useState('cursor-not-allowed bg-gray-300 hover:shadow-none')
+  const [claiming, setClaiming] = useState(false)
 
   const handleClose = () => {
     props.handleClose()
@@ -16,17 +18,22 @@ export default function ClaimModal(props) {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    setActive(claimId && u_identifier && amount)
+    setClasses((amount && u_identifier && claimId) ? 'bg-gradient-to-tr from-purple-500 to-purple-700 button-hover' : 'cursor-not-allowed bg-gray-300 hover:shadow-none')
   }, [claimId, u_identifier, amount])
 
-  const handleClaimToken = () => {
-    setActive(false)
-    dispatch(claimToken({
-      claimId: claimId,
-      u_identifier: u_identifier,
-      amount: amount
-    }))
+  const handleClaimToken = async () => {
+    setClaiming(true)
   }
+
+  useEffect(async () => {
+    if (claiming)
+      await dispatch(claimToken({
+        claimId: claimId,
+        u_identifier: u_identifier,
+        amount: amount
+      }))
+    setClaiming(false)
+  }, [claiming])
 
   const handleSwapId = (event) => {
     // claimId = event.target.value
@@ -163,22 +170,14 @@ export default function ClaimModal(props) {
         </div>
         <hr className="my-10" />
         <div className="flex justify-end px-6 pb-4">
-          <button
-            className={`
-              text-black
-              bg-gradient-to-tr
-              from-yellow-200
-              to-yellow-500 to-yellow-400
-              px-4
-              py-2
-              rounded
-              shadow-md
-              m-2
-            ` + (active ? '' : ' hidden')}
+          <Button
+            type={"primary"}
+            className={"rounded px-4 py-2 mb-7 " + classes}
+            loading={claiming}
             onClick={handleClaimToken}
+            name="Clain Now"
           >
-            Clain Now
-          </button>
+          </Button>
         </div>
       </div>
     </div>

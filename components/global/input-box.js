@@ -11,6 +11,7 @@ export default function InputBox(props) {
       <input
         type="number"
         value={props.value}
+        disabled={props.disabled ? props.disabled : false}
         className="
           w-full
           text-yellow-500 text-xl

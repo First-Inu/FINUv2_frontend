@@ -2,7 +2,7 @@ import Card from "@components/global/card";
 import Network from "@components/global/network";
 import InputBox from "@components/global/input-box";
 import BalanceStatus from "./balance-info";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { lockToken, getBalance, setAddress, getHistory } from "store/web3";
 import Button from "@components/global/button";
@@ -14,6 +14,7 @@ export default function Balance(props) {
   const address = useSelector(state => state.web3.wallet.address)
 
   const [amount, setAmount] = useState(0)
+  const [locking, setLocking] = useState(false)
 
   const dispatch = useDispatch()
 
@@ -30,9 +31,15 @@ export default function Balance(props) {
 
   const handleClick = (event) => {
     if (amount && chainId) {
-      dispatch(lockToken(amount))
+      setLocking(true)
     }
   }
+
+  useEffect(async () => {
+    if (locking)
+      await dispatch(lockToken(amount))
+    setLocking(false)
+  }, [locking])
 
   let classes = (amount && chainId) ? 'bg-gradient-to-tr from-purple-500 to-purple-700 button-hover' : 'cursor-not-allowed bg-gray-300 hover:shadow-none'
 
@@ -40,13 +47,14 @@ export default function Balance(props) {
     <Card className={props.className}>
       <Network type="eth">
       </Network>
-      <InputBox value={amount} onChange={handleChange}>
+      <InputBox value={amount} onChange={handleChange} disabled={chainId}>
       </InputBox>
       <BalanceStatus amount={amount}></BalanceStatus>
       <Button
         name="Send Tokens"
-        className={"mt-14 w-full rounded px-4 py-4 mb-7 font-bold text-xl focus:outline-none " + classes}
+        className={"mt-14 w-full rounded px-4 py-4 mb-7 font-bold text-xl " + classes}
         type={amount ? "primary" : ""}
+        loading={locking}
         onClick={handleClick}
       >
       </Button>

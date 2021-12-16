@@ -33,7 +33,7 @@ export default function Header() {
 
       dispatch(getBalance(acounts[0]))
 
-      if (chainId == 1 || chainId == 4)
+      if (chainId == process.env.eth_chain_id)
         dispatch(getHistory(acounts[0]))
     });
 
@@ -52,9 +52,8 @@ export default function Header() {
       address: acounts[0],
       chainId: chainId,
     }))
-    console.log('connet chain')
 
-    if (chainId == 1 || chainId == 4)
+    if (chainId == process.env.eth_chain_id)
       dispatch(getHistory(acounts[0]))
 
     dispatch(getBalance(acounts[0]))

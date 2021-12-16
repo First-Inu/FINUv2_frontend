@@ -1,3 +1,6 @@
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import Loader from "react-loader-spinner";
+
 export default function Button(props) {
   let classes = ' '
 
@@ -9,12 +12,16 @@ export default function Button(props) {
       props.onClick(event)
   }
 
+  const loading = props.loading ? props.loading : false
+  const size = props.size ? props.size : 20
+
   return (
     <button
-      className={props.className + classes + " rounded focus:outline-none"}
+      className={props.className + classes + " rounded focus:outline-none flex justify-center items-center"}
       onClick={handleClick}
     >
-      {props.name}
+      {(loading ? <Loader type="Oval" color="#00BFFF" height={size} width={size} /> :
+        <div> {props.name} </div>)}
     </button>
   )
 }

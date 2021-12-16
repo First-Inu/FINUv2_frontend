@@ -151,7 +151,7 @@ const webSlice = createSlice({
     },
     history: {
 
-    }
+    },
   },
   reducers: {
     setBalance: (state, { payload }) => {
@@ -179,7 +179,7 @@ const webSlice = createSlice({
       state.wallet.chainId = chainId
 
       const wallet = state.wallet;
-      const abi = (chainId == 1 || chainId == 4) ? contractAbi : bnbAbi
+      const abi = (chainId == process.env.eth_chain_id) ? contractAbi : bnbAbi
 
       if (TokenAddress.TOKEN_ADDRESS[chainId]) {
         finuContract = new state.wallet.web3object.eth.Contract(ercAbi, TokenAddress.TOKEN_ADDRESS[chainId])
@@ -203,7 +203,7 @@ const webSlice = createSlice({
       }
       if (state.wallet.web3object) {
         const wallet = state.wallet
-        const abi = (state.wallet.chainId == 1 || state.wallet.chainId == 4) ? contractAbi : bnbAbi
+        const abi = (state.wallet.chainId == process.env.eth_chain_id) ? contractAbi : bnbAbi
         if (TokenAddress.TOKEN_ADDRESS[wallet.chainId]) {
           finuContract = new wallet.web3object.eth.Contract(ercAbi, TokenAddress.TOKEN_ADDRESS[wallet.chainId])
           tokenContract = new wallet.web3object.eth.Contract(abi, TokenAddress.CONTRACT_ADDRESSS[wallet.chainId])
