@@ -16,13 +16,13 @@ export default function LockInfoModal(props) {
     for (let i = 0; i < history.length; i++) {
       items.push(
         <tr key={i + '_claim'}>
-          <td>
+          <td className="px-6 py-4 whitespace-nowrap text-center">
             {history[i].claimId}
           </td>
-          <td>
+          <td className="px-6 py-4 whitespace-nowrap">
             {history[i].u_identifier}
           </td>
-          <td>
+          <td className="px-6 py-4 whitespace-nowrap">
             {history[i].amount}
           </td>
         </tr>
@@ -35,7 +35,7 @@ export default function LockInfoModal(props) {
 
   return (
     <div
-      className={"justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none text-left " + (props.show ? "" : "hidden")}
+      className={"justify-center items-center flex overflow-x-auto overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none text-left " + (props.show ? "" : "hidden")}
     >
       <div
         className="fixed inset-0 transition-opacity"
@@ -100,22 +100,22 @@ export default function LockInfoModal(props) {
         >
           History
         </div>
-        <div className="py-10 text-center">
+        <div className="py-10 text-center px-2">
           To claim your tokens, all you have to do is switch to the
           <span className="text-yellow-500"> {' bnb network '}</span>
-          on your wallet.
+          on your wallet and claim.
         </div>
         <hr />
-        <div className="pt-10 flex items-center justify-center px-10">
-          <table className="w-full">
-            <thead>
+        <div className="py-10 flex overflow-x-auto shadow items-center justify-center px-10">
+          <table className="w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
               <tr>
-                <th> SwapID </th>
-                <th> Identifier </th>
-                <th> Amount </th>
+                <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider"> SwapID </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"> Identifier </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"> Amount </th>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="bg-white divide-y divide-gray-200">
               {rows}
             </tbody>
           </table>

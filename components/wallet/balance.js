@@ -45,7 +45,7 @@ export default function Balance(props) {
       <BalanceStatus amount={amount}></BalanceStatus>
       <Button
         name="Send Tokens"
-        className={"mt-14 w-full rounded px-4 py-4 mb-6 font-bold text-xl focus:outline-none " + classes}
+        className={"mt-14 w-full rounded px-4 py-4 mb-7 font-bold text-xl focus:outline-none " + classes}
         type={amount ? "primary" : ""}
         onClick={handleClick}
       >

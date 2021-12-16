@@ -29,7 +29,7 @@ export default function Swap() {
       <WalletLink></WalletLink>
 
       <Card className="mt-0">
-        <Network type="bnb">
+        <Network type="bnb" name="Binance Smart Chain">
         </Network>
       </Card>
 

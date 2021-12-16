@@ -2,7 +2,7 @@
 
 export default function Network(props) {
   let iconPath = '/icons/eth.svg'
-  let nextworkName = 'Ethereum Mainnet'
+  let networkName = 'Ethereum Mainnet'
 
   if (props.type) {
     switch (props.type) {
@@ -15,13 +15,13 @@ export default function Network(props) {
     }
   } else {
     iconPath = props.icon
-    nextworkName = props.name
+    networkName = props.name
   }
 
   return (
     <div className={"flex items-center " + props.className}>
       <img className="w-3" src={iconPath} alt=""/>
-      <div className="pl-2 text-base text-purple-700"> {nextworkName} </div>
+      <div className="pl-2 text-base text-purple-700"> {props.name ? props.name : networkName } </div>
     </div>
   );
 }
