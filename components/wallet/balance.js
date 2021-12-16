@@ -47,7 +47,7 @@ export default function Balance(props) {
     <Card className={props.className}>
       <Network type="eth">
       </Network>
-      <InputBox value={amount} onChange={handleChange} disabled={chainId}>
+      <InputBox value={amount} onChange={handleChange} disabled={chainId != process.env.eth_chain_id}>
       </InputBox>
       <BalanceStatus amount={amount}></BalanceStatus>
       <Button
