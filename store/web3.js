@@ -49,7 +49,7 @@ export const getHistory = createAsyncThunk(
           return {
             claimId: item.claimId,
             u_identifier: item.u_identifier,
-            amount: web3.utils.fromWei(item.amount, 'picoether')
+            amount: web3.utils.fromWei(item.amount, 'shannon')
           }
         })
         thunkAPI.dispatch(setHistory(lockHistory))
@@ -69,7 +69,7 @@ export const claimToken = createAsyncThunk(
       const address = thunkAPI.getState().web3.wallet.address
       const chainId = thunkAPI.getState().web3.wallet.chainId
 
-      const tokenAmount = web3object.utils.toWei(req.amount.toString(), 'picoether')
+      const tokenAmount = web3object.utils.toWei(req.amount.toString(), 'shannon')
 
       const tx = await finuContract.methods.approve(TokenAddress.CONTRACT_ADDRESSS[chainId], tokenAmount).send({ from: address })
       const response = await tokenContract.methods.claimToken(parseInt(req.claimId), parseInt(req.u_identifier), address, tokenAmount).send({
@@ -111,7 +111,7 @@ export const lockToken = createAsyncThunk(
 
       const tokenBalance = await finuContract.methods.balanceOf(address).call()
 
-      const bnbTokenAmount = web3object.utils.toWei(amount.toString(), 'picoether')
+      const bnbTokenAmount = web3object.utils.toWei(amount.toString(), 'shannon')
 
       const data = {
         claim_id: swapID,
